@@ -9,17 +9,18 @@ public class Application {
     public static void main(String[] args) {
 
         DataClass dataClass = new DataClass();
+        SubroutineClass subroutineClass = new SubroutineClass();
         List<String> convertedList = dataClass.arrayToListConverter(dataClass.anArrayOfCities);
 
         //Homework_1
         System.out.println("=============Homework_1=============");
-        SubroutineClass.printList(convertedList);
+        subroutineClass.printList(convertedList);
 
         //Homework_2
         System.out.println("=============Homework_2=============");
-        SubroutineClass.streamList(null);
-        SubroutineClass.streamList(convertedList);
-        SubroutineClass.streamList(new ArrayList<String>());
+        subroutineClass.streamList(null);
+        subroutineClass.streamList(convertedList);
+        subroutineClass.streamList(new ArrayList<>());
     }
 
 }

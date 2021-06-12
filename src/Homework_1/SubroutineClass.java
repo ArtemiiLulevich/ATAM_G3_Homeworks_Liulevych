@@ -13,13 +13,13 @@ public class SubroutineClass {
      *  Так же, обрабатывает исключения.
      */
 
-    public static void printList(List<String> anyList){
+    public void printList(List<String> anyList){
         for (String someData: anyList){
             System.out.println(someData);
         }
     }
 
-    public static void streamList(List<String> anyList){
+    public void streamList(List<String> anyList){
         try {
             anyList.stream().
                     map(element -> Arrays.toString(element.split(""))).
