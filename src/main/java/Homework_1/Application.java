@@ -1,15 +1,13 @@
 package Homework_1;
 
-
-import javax.management.relation.RoleList;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Application {
     public static void main(String[] args) {
 
-        DataClass dataClass = new DataClass();
-        SubroutineClass subroutineClass = new SubroutineClass();
+        Homework_1.DataClass dataClass = new Homework_1.DataClass();
+        Homework_1.SubroutineClass subroutineClass = new Homework_1.SubroutineClass();
         List<String> convertedList = dataClass.arrayToListConverter(dataClass.anArrayOfCities);
 
         //Homework_1
