@@ -1,6 +1,6 @@
 # idea folder
 .idea/
-out/
+/target
 # Files
 
 *.iml
