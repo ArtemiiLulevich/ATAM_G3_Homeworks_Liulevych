@@ -1,17 +1,19 @@
 package Homework_3.entities;
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CashHolder {
 
-    private final static Logger LOGGER = LogManager.getLogger("Robot");
+    private final static Logger LOGGER = LogManager.getLogger("Robot accountant");
 
+    private final List<String> appendableCurrencies = Arrays.asList(
+            "UAH",
+            "USD",
+            "EUR");
 
     private Map<String, List<Currency>> cash = new HashMap<>();
 
@@ -36,25 +38,30 @@ public class CashHolder {
     }
 
 
-
-
-
     public CashHolder putCashToCashHolder(Currency currency, Double sum){
 
-        int count = (int) (sum - (sum % 1.00));
-        String name = currency.getName();
-        List<Currency> temp = new ArrayList<>();
+        if (appendableCurrencies.contains(currency.getName())){
+            int count = (int) (sum - (sum % 1.00));
+            String name = currency.getName();
+            List<Currency> temp = new ArrayList<>();
 
-        for(int i = 0; i < count + 1; i++){
-            Currency tempCur = currency.clone();
-            if(i < count){
-                tempCur.setNominal(1.00);
-            } else {
-                tempCur.setNominal(sum % 1.00);
+            for(int i = 0; i < count + 1; i++){
+                Currency tempCur = currency.clone();
+                if(i < count){
+                    tempCur.setNominal(1.00);
+                } else {
+                    tempCur.setNominal(sum % 1.00);
+                }
+                temp.add(tempCur);
             }
-            temp.add(tempCur);
+            this.cash.put(name, temp);
+
+        } else {
+            LOGGER.info("There is no possibility to create an CashHolder with currency {}.\n" +
+                            "Possible currencies {}",
+                    currency.getName(),
+                    appendableCurrencies);
         }
-        this.cash.put(name, temp);
         return this;
     }
 
