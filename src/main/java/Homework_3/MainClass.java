@@ -10,12 +10,10 @@ public class MainClass {
 
     private final static Logger LOGGER = LogManager.getLogger(MainClass.class);
 
-
     public static void main(String[] args) {
         CashHolder holder = new CashHolder();
 
         holder.putCashToCashHolder(new Currency("UAH"), 25.5);
-
 //        LOGGER.info(holder);
 //        LOGGER.info(holder.getCashInCurrency("UAH"));
 //
@@ -25,8 +23,11 @@ public class MainClass {
         CreditCard card_1 = new CreditCard("UAH", 123456);
         card_1.addCardToCashHolder(holder);
         LOGGER.info(card_1.getMoney("UAH", 18.00).size());
+        LOGGER.info(card_1.getMoney("UAH", 20.00).size());
 
-
+        card_1.setCreditOn();
+        LOGGER.info(card_1.getMoney("UAH", 400.00).size());
+        card_1.getCreditBalance("UAH");
     }
 
 }

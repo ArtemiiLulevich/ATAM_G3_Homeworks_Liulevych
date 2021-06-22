@@ -10,7 +10,7 @@ public class CashHolder {
 
     private final static Logger LOGGER = LogManager.getLogger("Robot accountant");
 
-    private final List<String> appendableCurrencies = Arrays.asList(
+    public final List<String> appendableCurrencies = Arrays.asList(
             "UAH",
             "USD",
             "EUR");
@@ -19,7 +19,7 @@ public class CashHolder {
 
     private Map<String, List<Currency>> cash = new HashMap<>();
 
-    private double getBalance(String currencyName){
+    public double getBalance(String currencyName){
         double balance = 0.00;
         List<Currency> result = this.cash.get(currencyName);
 
@@ -145,7 +145,7 @@ public class CashHolder {
                     "Card limit is 5");
         }
     }
-// #TODO complete this method
+
     public List<Currency> getMoneyFromCashHolderByCard(String currencyName, double sumOfMoney, int cardNumber){
         List<Currency> result = this.cash.get(currencyName);
 
