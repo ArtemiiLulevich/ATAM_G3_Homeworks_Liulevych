@@ -1,14 +1,14 @@
 package Homework_3.entities;
 
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class CashHolder {
+public class CashHolder extends BaseEntity{
 
-    private final static Logger LOGGER = LogManager.getLogger("Robot accountant");
+    public CashHolder(String loggerName) {
+        super(loggerName);
+    }
 
     public final List<String> appendableCurrencies = Arrays.asList(
             "UAH",
@@ -81,10 +81,33 @@ public class CashHolder {
             this.cash.put(name, temp);
 
         } else {
-            LOGGER.info("There is no possibility to create an CashHolder with currency {}.\n" +
+            log.info("There is no possibility to create an CashHolder with currency {}.\n" +
                             "Possible currencies {}",
                     currency.getName(),
                     appendableCurrencies);
+        }
+        return this;
+    }
+
+    public CashHolder putCashToCashHolder(String currencyName, List<Currency> money) {
+        this.cash.put(currencyName, money);
+        return this;
+    }
+
+    public CashHolder putCashToCashHolder(List<Currency> money) {
+        if (!money.isEmpty()){
+            money.stream()
+                    .map(Currency::getName)
+                    .distinct()
+                    .forEach(name -> {
+                        List<Currency> temp = money.stream()
+                                .filter(currency -> currency
+                                        .getName()
+                                        .equals(name))
+                                .collect(Collectors.toList());
+                        this.cash.put(name, temp);
+
+                    });
         }
         return this;
     }
@@ -100,7 +123,7 @@ public class CashHolder {
             }
 
             if(currentSumOfCurrencyInCashHolder < sumOfMoney){
-                LOGGER.info("Available sum {} low than {}. Return all cash.",
+                log.info("Available sum {} low than {}. Return all cash.",
                         currentSumOfCurrencyInCashHolder,
                         sumOfMoney);
                 return result;
@@ -121,7 +144,7 @@ public class CashHolder {
                      result) {
                     balance += rest.getNominal();
                 }
-                LOGGER.info("Requested sum returned. Balance: {}", balance);
+                log.info("Requested sum returned. Balance: {}", balance);
                 return returnedCurrency;
             }
         } else {
@@ -129,19 +152,20 @@ public class CashHolder {
         }
     }
 
-    public void addCard(int cardNumber, String currency){
+    public void addCard(CreditCard creditCard){
         if (cardList.size() < 5){
-            if (appendableCurrencies.contains(currency)){
-                cardList.add(cardNumber);
-                LOGGER.info("Card {} added to the cashHolder.\n" +
+            if (appendableCurrencies.contains(creditCard.getCurrency())){
+                cardList.add(creditCard.getCardNumber());
+
+                log.info("Card {} added to the cashHolder.\n" +
                                 "Connected with currency {}.",
-                        cardNumber,
-                        currency);
+                        creditCard.getCardNumber(),
+                        creditCard.getCurrency());
             } else {
-                LOGGER.info("Card currency is not supported by the cashHolder.");
+                log.info("Card currency is not supported by the cashHolder.");
             }
         } else {
-            LOGGER.info("The limit of the number of cards is exceeded.\n" +
+            log.info("The limit of the number of cards is exceeded.\n" +
                     "Card limit is 5");
         }
     }
@@ -157,7 +181,7 @@ public class CashHolder {
             }
 
             if(currentSumOfCurrencyInCashHolder < sumOfMoney){
-                LOGGER.info("Available sum {} low than {}. No money will be issued.",
+                log.info("Available sum {} low than {}. No money will be issued.",
                         currentSumOfCurrencyInCashHolder,
                         sumOfMoney);
                 return new ArrayList<>();
@@ -174,13 +198,13 @@ public class CashHolder {
                 }
                 result.removeAll(returnedCurrency);
 
-                LOGGER.info("Requested sum {} returned. Balance: {}",
+                log.info("Requested sum {} returned. Balance: {}",
                         returnedSum,
                         this.getBalance(currencyName));
                 return returnedCurrency;
             }
         } else {
-            LOGGER.info("Card not in card list. Access denied.");
+            log.info("Card not in card list. Access denied.");
             return new ArrayList<>();
         }
     }

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CreditCard {
+public class CreditCard extends BaseEntity{
 
     private final String currency;
     private final int cardNumber;
@@ -20,12 +20,23 @@ public class CreditCard {
 
     private final static Logger LOGGER = LogManager.getLogger("Credit card");
 
-    public CreditCard(String currency, int cardNumber) {
+    public CreditCard(String loggerName, String currency, int cardNumber) {
+        super(loggerName);
         this.currency = currency;
         this.cardNumber = cardNumber;
         this.creditOn = false;
         this.creditLimit = 1000.00;
     }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public int getCardNumber() {
+        return cardNumber;
+    }
+
+
 
     public void setCreditOn(){
         if (!creditOn) {
@@ -100,7 +111,6 @@ public class CreditCard {
         }
     }
 
-
     public double getCreditBalance(String currencyName){
         double balance = 0.00;
         List<Currency> result = this.credits.get(currencyName);
@@ -115,15 +125,14 @@ public class CreditCard {
 
     public void addCardToCashHolder(CashHolder cashHolder){
         this.cashHolder = cashHolder;
-        cashHolder.addCard(cardNumber, this.currency);
+        cashHolder.addCard(this);
     }
 
-    public List<Currency> getMoney(String currency, double sum){
+    public List<Currency> getMoneyFromCreditCard(String currency, double sum){
 
         if(sum <= this.cashHolder.getBalance(currency)){
             return this.cashHolder.getMoneyFromCashHolderByCard(currency, sum, this.cardNumber);
         } else {
-
             List<Currency> mixedMoney = new ArrayList<>();
             double balance = this.cashHolder.getBalance(currency);
             double difference = sum - balance;
