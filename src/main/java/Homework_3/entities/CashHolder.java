@@ -174,7 +174,9 @@ public class CashHolder {
                 }
                 result.removeAll(returnedCurrency);
 
-                LOGGER.info("Requested sum returned. Balance: {}", this.getBalance(currencyName));
+                LOGGER.info("Requested sum {} returned. Balance: {}",
+                        returnedSum,
+                        this.getBalance(currencyName));
                 return returnedCurrency;
             }
         } else {

@@ -54,7 +54,6 @@ public class CreditCard {
                 temp.add(tempCur);
             }
             this.credits.put(name, temp);
-
         } else {
             LOGGER.info("There is no possibility to create an CashHolder with currency {}.\n" +
                             "Possible currencies {}",
@@ -91,7 +90,9 @@ public class CreditCard {
                 }
                 result.removeAll(returnedCurrency);
                 LOGGER.info("The requested amount exceeds the available amount\n" +
-                        "on a credit card. Loan funds issued. Credit balance - {}", this.getCreditBalance(currency));
+                        "on a credit card. Loan funds issued. Credit balance - {}. Returned credit sum {}",
+                        this.getCreditBalance(currency),
+                        returnedSum);
                 return returnedCurrency;
             }
         } else {
@@ -123,7 +124,13 @@ public class CreditCard {
             return this.cashHolder.getMoneyFromCashHolderByCard(currency, sum, this.cardNumber);
         } else {
 
-            return this.getMoneyFromCredit(currency, sum);
+            List<Currency> mixedMoney = new ArrayList<>();
+            double balance = this.cashHolder.getBalance(currency);
+            double difference = sum - balance;
+
+            mixedMoney.addAll(this.cashHolder.getMoneyFromCashHolderByCard(currency, balance, this.cardNumber));
+            mixedMoney.addAll(this.getMoneyFromCredit(currency, difference));
+            return mixedMoney;
         }
 
     }

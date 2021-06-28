@@ -13,7 +13,7 @@ public class MainClass {
     public static void main(String[] args) {
         CashHolder holder = new CashHolder();
 
-        holder.putCashToCashHolder(new Currency("UAH"), 25.5);
+        holder.putCashToCashHolder(new Currency("UAH"), 250.0);
 //        LOGGER.info(holder);
 //        LOGGER.info(holder.getCashInCurrency("UAH"));
 //
