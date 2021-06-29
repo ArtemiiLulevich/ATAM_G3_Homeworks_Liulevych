@@ -23,12 +23,12 @@ public class MainClass {
 //                "UAH",
 //                20.50).size());
         CreditCard card_1 = new CreditCard("Credit Card 1","UAH", 123456);
-//        holder.addCard(card_1);
+
         card_1.addCardToCashHolder(holder);
         LOGGER.info(card_1.getMoneyFromCreditCard("UAH", 18.00).size());
         LOGGER.info(card_1.getMoneyFromCreditCard("UAH", 20.00).size());
 
-        card_1.setCreditOn();
+//        card_1.setCreditOn();
         LOGGER.info(card_1.getMoneyFromCreditCard("UAH", 400.00).size());
         card_1.getCreditBalance("UAH");
         System.out.println("===================Homework_3=====================\n");

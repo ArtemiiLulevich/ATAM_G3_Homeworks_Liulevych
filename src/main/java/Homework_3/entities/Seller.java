@@ -4,16 +4,25 @@ import java.util.List;
 
 public class Seller extends User{
     private CashHolder cashHolder;
+    private List<Item> itemsForSale;
+    private final String curForSelling = "UAH";
+    public Terminal terminal;
 
     public Seller(String name, List<Item> items) {
         super(name);
         this.itemsForSale = items;
         this.cashHolder = new CashHolder("Seller cashHolder" + name);
+        this.terminal = new Terminal("Seller " + name + " terminal");
         log.debug("Seller {} created ", name);
     }
 
-    private List<Item> itemsForSale;
-    private final String curForSelling = "UAH";
+    public String getCurForSelling() {
+        return curForSelling;
+    }
+
+    public CashHolder getCashHolder() {
+        return cashHolder;
+    }
 
     public List<Item> getItemsForSale() {
         return itemsForSale;
@@ -38,11 +47,17 @@ public class Seller extends User{
            if(currency.getName().equals(curForSelling)) {
                amount+=currency.getNominal();
            }
+            // TODO: 28.06.2021 Дописать метод конвертации валюты 
+//           else {
+//               convertCurrency();
+//           }
         }
 
         return saleItem(itemName, amount);
     }
 
+
+    // by cash
     public Item saleItem(String name, Double amount) {
         for (Item item: this.itemsForSale){
             if(item.getName().equals(name)){
@@ -65,9 +80,42 @@ public class Seller extends User{
         return null;
     }
 
+    // by credit card
+    public Item saleItem(String name, CreditCard clientCard, Double amount) {
+        for (Item item: this.itemsForSale){
+            if(item.getName().equals(name)){
+                log.info("Goods {} in", name);
+                if(item.getPrice() == amount){
+                    if (this.terminal.getPaymentByCard(this, clientCard, amount)) {
+                        log.info("Sold!");
+                        return item;
+                    }
+                } else if (item.getPrice() < amount) {
+                    log.info("To much money to buy item. {}",
+                            item.getPrice() - amount);
+                    return null;
+                } else {
+                    log.info("To low money. {}", amount - item.getPrice());
+                    return null;
+                }
+            }
+        }
+        log.info("I don't have this item.");
+        return null;
+    }
+
     public void showProfit() {
         log.info("Sum is {}",
                 this.cashHolder.getCashInCurrency(curForSelling).size());
     }
+
+//    public List<Currency> convertCurrency(List<Currency> convertibleCurrency, String targetCurrency) {
+//        if () {
+//
+//        }
+//
+//
+//        return null;
+//    }
 
 }

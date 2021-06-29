@@ -4,12 +4,30 @@ public class Currency {
 
     private String name;
     private double nominal;
-    private int buyCourse;
-    private int sellCourse;
+    private static int buyCourse;
+    private static int sellCourse;
 
 
     public Currency(String name) {
         this.name = name;
+        switch (name) {
+            case "UAH" -> {
+                buyCourse = 1;
+                sellCourse = 1;
+            }
+            case "USD" -> {
+                buyCourse = 2;
+                sellCourse = 2;
+            }
+            case "EUR" -> {
+                buyCourse = 3;
+                sellCourse = 3;
+            }
+            default -> {
+                buyCourse = 0;
+                sellCourse = 0;
+            }
+        }
     }
 
 
@@ -27,7 +45,7 @@ public class Currency {
     }
 
     public Currency setBuyCourse(int buyCourse) {
-        this.buyCourse = buyCourse;
+        Currency.buyCourse = buyCourse;
         return this;
     }
 
@@ -36,7 +54,7 @@ public class Currency {
     }
 
     public Currency setSellCourse(int sellCourse) {
-        this.sellCourse = sellCourse;
+        Currency.sellCourse = sellCourse;
         return this;
     }
 
@@ -50,9 +68,7 @@ public class Currency {
     }
 
     public Currency clone(){
-        return new Currency(this.name)
-                .setBuyCourse(this.buyCourse)
-                .setSellCourse(this.sellCourse);
+        return new Currency(this.name);
     }
 
 
@@ -62,8 +78,7 @@ public class Currency {
                 "\"Nominal\": \"%s\"," +
                 "\"Buy Course\": \"%s\"," +
                 "\"Sell Course\": \"%s\"}",
-                this.name, this.nominal, this.buyCourse, this.sellCourse);
+                this.name, this.nominal, buyCourse, sellCourse);
     }
-
 
 }

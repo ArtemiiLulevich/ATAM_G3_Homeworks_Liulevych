@@ -1,8 +1,5 @@
 package Homework_3.entities;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +13,6 @@ public class CreditCard extends BaseEntity{
     private boolean creditOn;
     private double creditLimit;
     private Map<String, List<Currency>> credits = new HashMap<>();
-
-
-    private final static Logger LOGGER = LogManager.getLogger("Credit card");
 
     public CreditCard(String loggerName, String currency, int cardNumber) {
         super(loggerName);
@@ -36,15 +30,13 @@ public class CreditCard extends BaseEntity{
         return cardNumber;
     }
 
-
-
     public void setCreditOn(){
         if (!creditOn) {
             creditOn = true;
             putCreditCash(new Currency("UAH"), this.creditLimit);
-            LOGGER.info("Loan funds are credited. Credit balance {}", this.getCreditBalance("UAH"));
+            log.info("Loan funds are credited. Credit balance {}", this.getCreditBalance("UAH"));
         } else {
-            LOGGER.info("Credits on the card are already activated.");
+            log.info("Credits on the card are already activated.");
         }
     }
 
@@ -66,7 +58,7 @@ public class CreditCard extends BaseEntity{
             }
             this.credits.put(name, temp);
         } else {
-            LOGGER.info("There is no possibility to create an CashHolder with currency {}.\n" +
+            log.info("There is no possibility to create an CashHolder with currency {}.\n" +
                             "Possible currencies {}",
                     currency.getName(),
                     this.cashHolder.appendableCurrencies);
@@ -84,7 +76,7 @@ public class CreditCard extends BaseEntity{
             }
 
             if(currentSumOfCurrencyInCashHolder < sumOfMoney){
-                LOGGER.info("Available sum {} low than {}. Return all cash.",
+                log.info("Available sum {} low than {}. Return all cash.",
                         currentSumOfCurrencyInCashHolder,
                         sumOfMoney);
                 return result;
@@ -100,7 +92,7 @@ public class CreditCard extends BaseEntity{
                     }
                 }
                 result.removeAll(returnedCurrency);
-                LOGGER.info("The requested amount exceeds the available amount\n" +
+                log.info("The requested amount exceeds the available amount\n" +
                         "on a credit card. Loan funds issued. Credit balance - {}. Returned credit sum {}",
                         this.getCreditBalance(currency),
                         returnedSum);
@@ -114,14 +106,32 @@ public class CreditCard extends BaseEntity{
     public double getCreditBalance(String currencyName){
         double balance = 0.00;
         List<Currency> result = this.credits.get(currencyName);
-
-        for (Currency rest:
-                result) {
-            balance += rest.getNominal();
+        if (creditOn) {
+            for (Currency rest :
+                    result) {
+                balance += rest.getNominal();
+            }
         }
-
         return balance;
     }
+
+    public double getCashHolderBalance(String currencyName) {
+        return this.cashHolder.getBalance(currencyName);
+    }
+
+    public double getCreditCardBalance(String currencyName) {
+        double balance = 0.00;
+        List<Currency> result = this.credits.get(currencyName);
+        if (creditOn) {
+            for (Currency rest :
+                    result) {
+                balance += rest.getNominal();
+            }
+        }
+        balance += this.cashHolder.getBalance(currencyName);
+        return balance;
+    }
+
 
     public void addCardToCashHolder(CashHolder cashHolder){
         this.cashHolder = cashHolder;
