@@ -15,35 +15,47 @@ public class MainClass {
         System.out.println("===================Homework_3=====================");
         CashHolder holder = new CashHolder("Just cashHolder");
 
-        holder.putCashToCashHolder(new Currency("UAH"), 250.0);
-//        LOGGER.info(holder);
-//        LOGGER.info(holder.getCashInCurrency("UAH"));
-//
-//        LOGGER.info(holder.getMoneyFromCashHolder(
-//                "UAH",
-//                20.50).size());
+        holder.putCashToCashHolder(new Currency("UAH"), 2.5);
+
         CreditCard card_1 = new CreditCard("Credit Card 1","UAH", 123456);
 
         card_1.addCardToCashHolder(holder);
-        LOGGER.info(card_1.getMoneyFromCreditCard("UAH", 18.00).size());
-        LOGGER.info(card_1.getMoneyFromCreditCard("UAH", 20.00).size());
+        LOGGER.info(card_1.getMoneyFromCreditCard("UAH", 2.50));
 
-//        card_1.setCreditOn();
+
+
+        LOGGER.info(card_1.getMoneyFromCreditCard("UAH", 400.00).size());
+        card_1.setCreditOn();
         LOGGER.info(card_1.getMoneyFromCreditCard("UAH", 400.00).size());
         card_1.getCreditBalance("UAH");
         System.out.println("===================Homework_3=====================\n");
+
+
         System.out.println("===================Homework_4=====================");
 
         List<Item> itemForSale = new ArrayList<>();
         itemForSale.add(new Item("Grechka", 12.00));
+        itemForSale.add(new Item("Water", 13.50));
 
-
-        User buyer = new User("Vasilisa");
+        User buyer = new User("Vasilisa", "UAH", 1234565);
         Seller seller = new Seller("Petya",itemForSale);
 
+        buyer.putMoneyToCashHolder(new Currency("UAH"), 30.00);
 
+//        LOGGER.info(buyer.getMoneyFromCashHolder("UAH", 30).size());
 
-//        buyer.putItemInBag(seller.saleItem("Grechka", buyer.))
+//        buyer.creditCard.setCreditOn();
+
+        buyer.putItemInBag(seller.saleItem("Water",
+                buyer.getCreditCard().getMoneyFromCreditCard("UAH", 13.50)));
+
+        LOGGER.info(buyer.getCountMoneyFromCashHolder());
+
+        buyer.getBag().showBagEntry();
+
+        buyer.putItemInBag(seller.saleItem("Grechka", buyer.getCreditCard(), 12.00));
+
+        buyer.getBag().showBagEntry();
 
     }
 

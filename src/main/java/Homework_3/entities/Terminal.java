@@ -15,6 +15,9 @@ public class Terminal extends BaseEntity{
                                     .getMoneyFromCreditCard(
                                             seller.getCurForSelling(),
                                             priceOfItem));
+            log.info("The money has been debited from the card № {}." +
+                            "The transaction was successful.",
+                    clientCard.getCardNumber());
             return true;
         } else {
             log.info("Not enough money on the card.");

@@ -23,9 +23,10 @@ public class CashHolder extends BaseEntity{
         double balance = 0.00;
         List<Currency> result = this.cash.get(currencyName);
 
-        for (Currency rest:
-                result) {
-            balance += rest.getNominal();
+        if (result != null) {
+            for (Currency rest: result) {
+                balance += rest.getNominal();
+            }
         }
 
         return balance;
@@ -112,6 +113,7 @@ public class CashHolder extends BaseEntity{
         return this;
     }
 
+    // TODO: 02.07.2021 рефакторинг кода, много повторов 
     public List<Currency> getMoneyFromCashHolder(String currencyName, double sumOfMoney){
         List<Currency> result = this.cash.get(currencyName);
 
@@ -123,28 +125,47 @@ public class CashHolder extends BaseEntity{
             }
 
             if(currentSumOfCurrencyInCashHolder < sumOfMoney){
-                log.info("Available sum {} low than {}. Return all cash.",
+                log.info("Available sum {} low than {}. Return all cash",
                         currentSumOfCurrencyInCashHolder,
                         sumOfMoney);
                 return result;
             } else {
+                int intSum = (int) sumOfMoney;
+                double doubleSum = sumOfMoney % 1.00;
+                List<Double> range = new ArrayList<>();
+                for (int i = 0; i < intSum; i++){
+                    range.add(1.00);
+                }
+                if (doubleSum != 0.0){
+                    range.add(doubleSum);
+                }
                 List<Currency> returnedCurrency = new ArrayList<>();
                 double returnedSum = 0;
-                for (Currency currency: result){
-                    if(returnedSum < sumOfMoney){
-                        returnedCurrency.add(currency);
-                        returnedSum += currency.getNominal();
+                for (int i = 0; i < range.size(); i++) {
+                    if (returnedSum < sumOfMoney) {
+
+                        Currency currency = result.get(0);
+                        Currency tempCur = currency.clone();
+                        tempCur.setNominal(range.get(i));
+                        returnedCurrency.add(tempCur);
+                        if (range.get(i) != 1) {
+                            currency.setNominal(currency.getNominal() - range.get(i));
+                        } else {
+                            result.remove(currency);
+                        }
+                        returnedSum += range.get(i);
                     } else {
                         break;
                     }
                 }
-                result.removeAll(returnedCurrency);
+
                 double balance = 0;
                 for (Currency rest:
-                     result) {
+                        result) {
                     balance += rest.getNominal();
                 }
-                log.info("Requested sum returned. Balance: {}", balance);
+                log.info("Requested sum {}: {} returned. Balance: {}",
+                        currencyName, sumOfMoney, balance);
                 return returnedCurrency;
             }
         } else {
@@ -186,21 +207,42 @@ public class CashHolder extends BaseEntity{
                         sumOfMoney);
                 return new ArrayList<>();
             } else {
+                int intSum = (int) sumOfMoney;
+                double doubleSum = sumOfMoney % 1.00;
+                List<Double> range = new ArrayList<>();
+                for (int i = 0; i < intSum; i++){
+                    range.add(1.00);
+                }
+                if (doubleSum != 0.0){
+                    range.add(doubleSum);
+                }
                 List<Currency> returnedCurrency = new ArrayList<>();
                 double returnedSum = 0;
-                for (Currency currency: result){
-                    if(returnedSum < sumOfMoney){
-                        returnedCurrency.add(currency);
-                        returnedSum += currency.getNominal();
+                for (int i = 0; i < range.size(); i++) {
+                    if (returnedSum < sumOfMoney) {
+
+                        Currency currency = result.get(0);
+                        Currency tempCur = currency.clone();
+                        tempCur.setNominal(range.get(i));
+                        returnedCurrency.add(tempCur);
+                        if (range.get(i) != 1) {
+                            currency.setNominal(currency.getNominal() - range.get(i));
+                        } else {
+                            result.remove(currency);
+                        }
+                        returnedSum += range.get(i);
                     } else {
                         break;
                     }
                 }
-                result.removeAll(returnedCurrency);
 
-                log.info("Requested sum {} returned. Balance: {}",
-                        returnedSum,
-                        this.getBalance(currencyName));
+                double balance = 0;
+                for (Currency rest:
+                        result) {
+                    balance += rest.getNominal();
+                }
+                log.info("Requested sum {}: {} returned. Balance: {}",
+                        currencyName, sumOfMoney, balance);
                 return returnedCurrency;
             }
         } else {

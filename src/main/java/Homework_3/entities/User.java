@@ -7,19 +7,22 @@ public class User extends BaseEntity{
     private String name;
     private CashHolder cashHolder;
     private Bag bag;
-    public CreditCard creditCard;
+    private CreditCard creditCard;
 
+
+    public User(String name, String cardCurrency, int cardNumber) {
+        this(name);
+        this.creditCard = new CreditCard("Credit card 1", cardCurrency, cardNumber);
+        this.creditCard.addCardToCashHolder(this.cashHolder);
+        log.debug("{} {} created",this.getClass().getName(), name);
+    }
 
     public User(String name) {
         super(name);
         this.name = name;
         this.cashHolder = new CashHolder( name + " User cashHolder");
         this.bag = new Bag(name + " User bag");
-        this.creditCard = new CreditCard("Credit card 1", "UAH", 12345678);
-        this.creditCard.addCardToCashHolder(this.cashHolder);
-        log.debug("{} {} created",this.getClass().getName(), name);
     }
-
 
     public String getName() {
         return name;
@@ -42,6 +45,10 @@ public class User extends BaseEntity{
     public User setBag(Bag bag) {
         this.bag = bag;
         return this;
+    }
+
+    public CreditCard getCreditCard() {
+        return creditCard;
     }
 
     public User putMoneyToCashHolder(Currency currency, Double sum){
@@ -80,6 +87,5 @@ public class User extends BaseEntity{
         this.bag.putItems(items);
         return this;
     }
-
 
 }

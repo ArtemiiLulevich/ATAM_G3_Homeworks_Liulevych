@@ -146,7 +146,6 @@ public class CreditCard extends BaseEntity{
             List<Currency> mixedMoney = new ArrayList<>();
             double balance = this.cashHolder.getBalance(currency);
             double difference = sum - balance;
-
             mixedMoney.addAll(this.cashHolder.getMoneyFromCashHolderByCard(currency, balance, this.cardNumber));
             mixedMoney.addAll(this.getMoneyFromCredit(currency, difference));
             return mixedMoney;
