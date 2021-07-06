@@ -88,4 +88,19 @@ public class User extends BaseEntity{
         return this;
     }
 
+    public User changeCurrencyAndSaveIt(String convertTo, List<Currency> cash, Bank bank){
+        List<Currency> newCash;
+        if(convertTo.equals("UAH")){
+            newCash = bank.changeToUah(cash);
+        } else {
+            newCash = bank.changeFromUah(convertTo, cash);
+        }
+        this.cashHolder.putCashToCashHolder(newCash);
+        return this;
+    }
+
+    public User changeCurrencyAndSaveIt(String convertTo, Bank bank){
+        return changeCurrencyAndSaveIt(convertTo, this.cashHolder.getAllMoney(), bank);
+    }
+
 }

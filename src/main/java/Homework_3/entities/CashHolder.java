@@ -250,4 +250,10 @@ public class CashHolder extends BaseEntity{
             return new ArrayList<>();
         }
     }
+
+    public List<Currency> getAllMoney(){
+        List<Currency> result = new ArrayList<>();
+        this.cash.forEach((key, value) -> result.addAll(value));
+        return result;
+    }
 }

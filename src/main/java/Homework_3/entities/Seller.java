@@ -47,10 +47,6 @@ public class Seller extends User{
            if(currency.getName().equals(curForSelling)) {
                amount+=currency.getNominal();
            }
-            // TODO: 28.06.2021 Дописать метод конвертации валюты 
-//           else {
-//               convertCurrency();
-//           }
         }
 
         return saleItem(itemName, amount);
@@ -108,14 +104,5 @@ public class Seller extends User{
         log.info("Sum is {}",
                 this.cashHolder.getCashInCurrency(curForSelling).size());
     }
-
-//    public List<Currency> convertCurrency(List<Currency> convertibleCurrency, String targetCurrency) {
-//        if () {
-//
-//        }
-//
-//
-//        return null;
-//    }
 
 }
